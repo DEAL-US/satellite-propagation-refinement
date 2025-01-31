@@ -163,12 +163,12 @@ for (seed in seeds) {
                   "real_pred_X" = d_test$X_predict_real,
                   "real_pred_Y" = d_test$Y_predict_real,
                   "real_pred_Z" = d_test$Z_predict_real,
-                  "prediction_X" = predicciones_corregidas$X,
-                  "prediction_Y" = predicciones_corregidas$Y,
-                  "prediction_Z" = predicciones_corregidas$Z,
-                  "error_X" = d_test$X_predict_real-predicciones_corregidas$X,
-                  "error_Y" = d_test$Y_predict_real-predicciones_corregidas$Y,
-                  "error_Z" = d_test$Z_predict_real-predicciones_corregidas$Z
+                  "prediction_X" = corrected_predictions$X,
+                  "prediction_Y" = corrected_predictions$Y,
+                  "prediction_Z" = corrected_predictions$Z,
+                  "error_X" = d_test$X_predict_real-corrected_predictions$X,
+                  "error_Y" = d_test$Y_predict_real-corrected_predictions$Y,
+                  "error_Z" = d_test$Z_predict_real-corrected_predictions$Z
     )
   b$spatial_error <- sqrt(b$error_X^2 + b$error_Y^2 + b$error_Z^2)
   
