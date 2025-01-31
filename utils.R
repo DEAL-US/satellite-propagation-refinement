@@ -44,3 +44,41 @@ search_date <- function(dataset, date, error_margin_date){
     return("MARGEN EXCEEDED")
   }
 }
+
+# Function to compute the RTN transformation matrix
+matrix_gcrf_to_rtn <- function(position, velocity) {
+  # Ensure inputs are vectors
+  if (length(position) != 3 || length(velocity) != 3) {
+    stop("Position and velocity must be 3-element vectors.")
+  }
+  
+  # Normalize the radial (R) vector
+  R <- position / sqrt(sum(position^2))
+  
+  # Calculate the transverse (Tv) vector
+  Tv <- velocity - (sum(velocity * R) * R)  # Remove radial component from velocity
+  Tv <- Tv / sqrt(sum(Tv^2))                  # Normalize
+  
+  # Calculate the normal (N) vector using cross product of R and Tv
+  N <- c(
+    R[2] * Tv[3] - R[3] * Tv[2],
+    R[3] * Tv[1] - R[1] * Tv[3],
+    R[1] * Tv[2] - R[2] * Tv[1]
+  )
+  
+  # Form the RTN transformation matrix
+  rtn_matrix <- matrix(c(R, Tv, N), nrow = 3, byrow = TRUE)
+  
+  return(rtn_matrix)
+}
+
+# Function to transform GCRF vectors to RTN
+transform_to_rtn <- function(r1, v1, r2) {
+  # Compute the RTN transformation matrix
+  rtn_matrix <- matrix_gcrf_to_rtn(r1, v1)
+  
+  # Transform position and velocity
+  r2_rtn <- as.integer(rtn_matrix %*% (r2-r1))
+  
+  return(c(r2_rtn))
+}
